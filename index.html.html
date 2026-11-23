@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NIRVANA | Something is watching</title>
+<style>
+:root{color-scheme:dark;--blk:#030203;--red:#ff1a3c;--deep:#7a0016;--glow:rgba(255,26,60,.55);--ice:#9dfcf0;--txt:#e9d8dc;--dim:#8a6a72}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--blk)}
+body{font-family:"Courier New",ui-monospace,monospace;color:var(--txt);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:env(safe-area-inset-top,0px) 10px env(safe-area-inset-bottom,0px);overflow:hidden;position:relative;background:radial-gradient(ellipse at 50% 40%,#1a0309 0,#030203 65%)}
+/* atmosphere layers */
+.fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+.scan{background:repeating-linear-gradient(0deg,rgba(0,0,0,.35) 0 1px,transparent 1px 3px);mix-blend-mode:multiply}
+.vig{background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.92) 100%)}
+.noise{opacity:.09;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");animation:grain 1.2s steps(4) infinite}
+.flick{background:rgba(255,26,60,.04);animation:flick 7s infinite}
+@keyframes grain{25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-2%)}}
+@keyframes flick{0%,92%,100%{opacity:0}93%{opacity:1}95%{opacity:.2}97%{opacity:.8}}
+#sil{position:fixed;left:50%;bottom:-2%;width:min(120vw,900px);transform:translateX(-50%);opacity:.5;z-index:0;pointer-events:none;animation:breathe 6s ease-in-out infinite}
+@keyframes breathe{50%{transform:translateX(-50%) scale(1.02);opacity:.62}}
+.tick{position:fixed;top:calc(env(safe-area-inset-top,0px) + 4px);left:0;right:0;font-size:10px;color:var(--red);letter-spacing:.18em;text-align:center;text-shadow:0 0 8px var(--glow);z-index:60;pointer-events:none}
+.tick i{animation:blink 1s steps(2) infinite;font-style:normal}
+@keyframes blink{50%{opacity:0}}
+.wrap{position:relative;z-index:5;display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:14px}
+.top{width:min(92vw,400px);display:flex;justify-content:space-between;align-items:center;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--dim)}
+.logo{color:var(--red);font-weight:900;letter-spacing:.3em;text-shadow:0 0 10px var(--red)}
+.eye{width:34px;height:20px}
+/* glitch */
+.glitch{position:relative;display:inline-block}
+.glitch::before,.glitch::after{content:attr(data-t);position:absolute;left:0;top:0;width:100%;overflow:hidden}
+.glitch::before{color:#00f0ff;transform:translateX(-2px);clip-path:inset(0 0 60% 0);animation:g1 3.2s infinite steps(1)}
+.glitch::after{color:var(--red);transform:translateX(2px);clip-path:inset(60% 0 0 0);animation:g2 2.7s infinite steps(1)}
+@keyframes g1{0%,90%{clip-path:inset(0 0 100% 0)}91%{clip-path:inset(10% 0 55% 0)}94%{clip-path:inset(60% 0 10% 0)}96%{clip-path:inset(0 0 100% 0)}}
+@keyframes g2{0%,85%{clip-path:inset(100% 0 0 0)}86%{clip-path:inset(30% 0 40% 0)}89%{clip-path:inset(70% 0 5% 0)}92%{clip-path:inset(100% 0 0 0)}}
+#feed{width:min(92vw,400px);height:min(calc(100dvh - 92px),700px);overflow-y:auto;scroll-snap-type:y mandatory;border-radius:6px;scrollbar-width:none;border:1px solid var(--deep);box-shadow:0 0 30px var(--glow),0 0 90px rgba(255,26,60,.25),inset 0 0 40px rgba(0,0,0,.9);background:#050102}
+#feed::-webkit-scrollbar{display:none}
+.reel{height:100%;scroll-snap-align:start;scroll-snap-stop:always;padding:12px;display:flex;flex-direction:column;gap:9px;position:relative;background:linear-gradient(180deg,rgba(40,3,10,.55),rgba(3,2,3,.95))}
+.bars{display:flex;gap:4px}.bars i{flex:1;height:2px;background:#2a0a10}.bars i.on{background:var(--red);box-shadow:0 0 6px var(--red)}.bars i.now{background:#ff7088}
+.head{display:flex;justify-content:space-between;align-items:center;font-size:9px;letter-spacing:.16em}
+.head .rec{color:var(--red)}.head .rec::before{content:"● ";animation:blink 1s steps(2) infinite}
+.pill{color:var(--dim);border:1px solid var(--deep);padding:4px 8px}
+h2{margin:0;font-size:clamp(20px,5.6vw,26px);line-height:1.1;letter-spacing:-.02em;font-weight:900;text-transform:uppercase;text-shadow:0 0 14px var(--glow)}
+h2 span{color:var(--red)}
+.stage{position:relative;flex:1;min-height:0;background:#070203;border:1px solid var(--deep);padding:11px;display:flex;flex-direction:column;gap:9px;overflow:hidden;box-shadow:inset 0 0 30px rgba(255,26,60,.12)}
+.stage::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(255,26,60,.05) 0 2px,transparent 2px 4px)}
+.stage.tear{animation:tear .35s steps(2)}
+@keyframes tear{0%{transform:translateX(0);filter:none}25%{transform:translateX(-6px) skewX(4deg);filter:hue-rotate(-30deg) contrast(1.6)}50%{transform:translateX(7px);clip-path:inset(0 0 45% 0)}75%{transform:translateX(-3px) skewX(-3deg);clip-path:inset(40% 0 0 0)}100%{transform:none;clip-path:none}}
+.ui{border:1px solid #3a1018;padding:9px 10px;font-size:11px;line-height:1.35;background:#0c0406;color:var(--txt);transition:all .3s;position:relative}
+.ui small{display:block;color:var(--dim);font-size:9px;letter-spacing:.1em;margin-bottom:2px}
+.btn{border-color:#5a1624;text-align:center;font-weight:700}
+.btn.bad,.res{background:#1b0409;border-color:var(--red);color:#ff8a9c;font-weight:700}
+.link{color:#ff8a9c;text-decoration:underline;word-break:break-all}
+.ui.tap{outline:2px solid var(--ice);box-shadow:0 0 18px rgba(157,252,240,.5);background:#061615;color:var(--ice)}
+.ui.avoid{outline:2px solid var(--red);box-shadow:0 0 22px var(--red);background:#2a0510;animation:shake .4s}
+.ui.skip{opacity:.3;filter:grayscale(1)}
+@keyframes shake{25%{translate:-4px}75%{translate:4px}}
+.ui .tag{position:absolute;right:-1px;top:-9px;font-size:9px;font-style:normal;font-weight:900;padding:2px 6px;color:#000;display:none}
+.ui.avoid .tag{display:block;background:var(--red);color:#fff}.ui.skip .tag{display:block;background:#666;color:#fff}.ui.tap .tag{display:block;background:var(--ice)}
+.cur{position:absolute;width:28px;height:28px;left:50%;top:70%;z-index:5;pointer-events:none;transition:left .7s ease,top .7s ease;filter:drop-shadow(0 0 6px var(--red))}
+.cur svg{width:100%;height:100%}
+.rip{position:absolute;z-index:4;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;border:2px solid var(--red);opacity:0;pointer-events:none}
+.rip.go{animation:rip .7s ease-out}
+@keyframes rip{from{opacity:1;transform:scale(.5)}to{opacity:0;transform:scale(4)}}
+.say{min-height:60px;border:1px solid var(--deep);background:rgba(20,3,8,.85);padding:9px 11px;font-size:12px;line-height:1.4;display:flex;gap:8px;align-items:flex-start}
+.say b{flex:none;font-size:9px;letter-spacing:.08em;padding:3px 6px;color:#000;background:var(--ice);margin-top:1px}
+.say b.avoid{background:var(--red);color:#fff;box-shadow:0 0 8px var(--red)}.say b.skip{background:#666;color:#fff}.say b.tip{background:#ffb02e}
+.side{position:absolute;right:8px;bottom:88px;display:flex;flex-direction:column;gap:8px;z-index:6}
+.side button{width:34px;height:34px;border:1px solid var(--deep);background:#0c0406;color:var(--red);font-size:14px;cursor:pointer}
+.side button.liked{background:var(--deep);color:#fff;box-shadow:0 0 10px var(--red)}
+button:focus-visible{outline:2px solid var(--ice);outline-offset:2px}
+.hint{font-size:10px;color:var(--dim);letter-spacing:.1em;text-align:center}
+#whisper{position:fixed;z-index:70;left:50%;top:44%;transform:translate(-50%,-50%);font-size:clamp(22px,6vw,44px);font-weight:900;letter-spacing:.2em;color:var(--red);text-shadow:0 0 20px var(--red),3px 0 #00f0ff;opacity:0;pointer-events:none;white-space:nowrap}
+#whisper.on{animation:whisper 1.6s ease-out}
+@keyframes whisper{0%{opacity:0}10%{opacity:.9}20%{opacity:.2}30%{opacity:.8}100%{opacity:0}}
+
+/* NIRVANA community extension */
+body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto;justify-content:flex-start;padding-bottom:34px}
+.wrap{flex:0 0 auto;margin:14px auto 0}
+.community{position:relative;z-index:5;width:min(92vw,760px);margin:28px auto 0;padding:20px;border:1px solid var(--deep);background:linear-gradient(160deg,rgba(35,4,12,.96),rgba(5,1,3,.98));box-shadow:0 0 28px rgba(255,26,60,.16);color:var(--txt)}
+.community-kicker{font-size:10px;letter-spacing:.2em;color:var(--red);text-transform:uppercase}
+.community h2{font-size:clamp(22px,5vw,34px);margin:9px 0}
+.community-intro{font:13px/1.6 Arial,sans-serif;color:#c9b7bb;max-width:620px}
+.community-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:18px}
+.community-card{border:1px solid #42101b;background:#0b0306;padding:14px;min-width:0}
+.community-card h3{font:700 14px/1.4 Arial,sans-serif;color:#fff;margin:0 0 7px}
+.community-card p{font:12px/1.55 Arial,sans-serif;color:#bda9ae;margin:0}
+.community-label{font-size:9px;letter-spacing:.14em;color:var(--ice);margin-bottom:8px}
+.community-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.community-link{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:10px 14px;border:1px solid var(--red);background:#21050d;color:#ffdce2;text-decoration:none;font:700 11px Arial,sans-serif;letter-spacing:.08em}
+.community-link.secondary{border-color:#63303b;background:transparent;color:#d9c5ca}
+.community-link:hover{background:#4a0a19}
+.community-note{font:11px/1.5 Arial,sans-serif;color:#8e747b;margin-top:13px}
+.community-form{display:grid;gap:9px;margin-top:12px}
+.community-form label{font:11px Arial,sans-serif;color:#cbb7bd}
+.community-form input,.community-form textarea,.community-form select{width:100%;padding:10px;border:1px solid #57202c;background:#090306;color:#f3e8eb;font:12px Arial,sans-serif;border-radius:2px}
+.community-form textarea{min-height:90px;resize:vertical}
+.community-form button{padding:12px;border:1px solid var(--red);background:#390713;color:#fff;font-weight:700;letter-spacing:.08em;cursor:pointer}
+.community-form button:hover{background:#5a0b20}
+@media(max-width:560px){.community{padding:15px}.community-grid{grid-template-columns:1fr}.community-actions{flex-direction:column}.community-link{width:100%}}
+
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="tick"><i>▲</i> INTRUSION DETECTED · TRACE <span id="ip">000.000.000.000</span> · SIGNAL COMPROMISED</div>
+<svg id="sil" viewBox="0 0 800 520" aria-hidden="true"><defs><radialGradient id="rg" cx="50%" cy="100%" r="70%"><stop offset="0" stop-color="#ff1a3c" stop-opacity=".55"/><stop offset="1" stop-color="#ff1a3c" stop-opacity="0"/></radialGradient><linearGradient id="hd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#140306"/><stop offset="1" stop-color="#000"/></linearGradient></defs>
+<ellipse cx="400" cy="520" rx="380" ry="230" fill="url(#rg)"/>
+<path d="M400 40c-95 0-150 70-150 160 0 40 10 70-20 110-45 50-120 70-150 120v90h640v-90c-30-50-105-70-150-120-30-40-20-70-20-110 0-90-55-160-150-160Z" fill="url(#hd)" stroke="#ff1a3c" stroke-opacity=".5" stroke-width="2"/>
+<ellipse cx="400" cy="200" rx="78" ry="98" fill="#000"/>
+<g class="eyes"><rect x="360" y="190" width="28" height="4" fill="#ff1a3c"><animate attributeName="opacity" values="1;1;1;0;1;1;1;1" dur="5s" repeatCount="indefinite"/></rect><rect x="412" y="190" width="28" height="4" fill="#ff1a3c"><animate attributeName="opacity" values="1;1;1;0;1;1;1;1" dur="5s" repeatCount="indefinite"/></rect></g>
+<rect x="300" y="420" width="200" height="110" fill="#0a0102" stroke="#ff1a3c" stroke-opacity=".7"/><path d="M315 440h90M315 455h140M315 470h70M315 485h120" stroke="#ff1a3c" stroke-opacity=".6" stroke-width="3"/></svg>
+<div class="fx scan"></div><div class="fx noise"></div><div class="fx flick"></div><div class="fx vig"></div>
+<div id="whisper" aria-hidden="true"></div>
+<div class="wrap">
+ <div class="top"><span class="logo glitch" data-t="NIRVANA">NIRVANA</span>
+  <svg class="eye" viewBox="0 0 34 20" aria-label="An eye watching you"><path d="M1 10C8 1 26 1 33 10 26 19 8 19 1 10Z" fill="none" stroke="#ff1a3c" stroke-width="1.5"/><circle id="pup" cx="17" cy="10" r="4.5" fill="#ff1a3c"/></svg>
+  <span>It sees you</span></div>
+ <div id="feed" aria-label="NIRVANA survival reels. Swipe up for the next one."></div>
+ <div class="hint">↑ SWIPE · TAP SCREEN TO FREEZE IT</div>
+</div>
+
+<section class="community" id="community" aria-labelledby="community-title">
+  <div class="community-kicker">NIRVANA // COMMUNITY SIGNAL</div>
+  <h2 id="community-title">YOU ARE NOT THE ONLY ONE.</h2>
+  <p class="community-intro">A suspicious internship email. A WhatsApp group you were rushed into. A form asking for more information than it needs. These situations happen to students every day. Share what you have learned so someone else can spot the warning signs sooner.</p>
+
+  <div class="community-grid">
+    <article class="community-card">
+      <div class="community-label">01 / DISCUSS</div>
+      <h3>Compare notes with other students.</h3>
+      <p>Explore conversations about suspicious internships, fake recruiters, phishing messages and digital safety on Reddit.</p>
+      <div class="community-actions">
+        <a class="community-link" href="https://www.reddit.com/search/?q=internship%20scam%20India" target="_blank" rel="noopener noreferrer">EXPLORE REDDIT DISCUSSIONS ↗</a>
+      </div>
+    </article>
+    <article class="community-card">
+      <div class="community-label">02 / THINK BEFORE YOU TAP</div>
+      <h3>Would you recognise the red flags?</h3>
+      <p>Try the situations above: look for urgency, upfront fees, unverified links and unnecessary requests for personal information.</p>
+      <a class="community-link secondary" href="#feed">REPLAY THE EXPERIENCE ↑</a>
+    </article>
+    <article class="community-card">
+      <div class="community-label">03 / SHARE SAFELY</div>
+      <h3>Help another student recognise a pattern.</h3>
+      <p>Use the prompt below to prepare a Reddit discussion. Remove names, phone numbers, email addresses, links containing personal tokens and all other identifying details first.</p>
+      <div class="community-actions">
+        <a class="community-link" href="https://www.reddit.com/submit?title=Have%20you%20received%20a%20suspicious%20internship%20message%3F" target="_blank" rel="noopener noreferrer">START A REDDIT POST ↗</a>
+      </div>
+    </article>
+    <article class="community-card">
+      <div class="community-label">04 / SEND A STORY</div>
+      <h3>What happened to you?</h3>
+      <p>Share a short, anonymised experience with the NIRVANA team. This opens your email app; it does not publish your story automatically.</p>
+      <form class="community-form" id="storyForm">
+        <label for="storyType">What kind of message was it?</label>
+        <select id="storyType" required>
+          <option value="">Choose a situation</option>
+          <option>Internship or job offer</option>
+          <option>College or WhatsApp group invitation</option>
+          <option>Payment or registration request</option>
+          <option>Suspicious link or form</option>
+          <option>Other digital safety concern</option>
+        </select>
+        <label for="storyText">Describe what happened (no personal or identifying details)</label>
+        <textarea id="storyText" maxlength="1200" required placeholder="What did the message say? What made you suspicious? What happened next?"></textarea>
+        <button type="submit">PREPARE AN EMAIL TO NIRVANA ↗</button>
+      </form>
+    </article>
+  </div>
+
+  <p class="community-note">Safety first: never post OTPs, passwords, ID documents, private conversations containing personal details, or unredacted screenshots. NIRVANA's community links open Reddit in a new tab. Stories sent by email are not automatically verified or published.</p>
+</section>
+
+<script>
+const R=[
+{pill:'FILE 01',title:'Scan the message <span>before it scans you</span>',
+ screen:`<div class="ui" id="a1"><small>PASTE THE MESSAGE HERE</small>“Congrats! Pay ₹1,500 to confirm your internship seat.”<i class="tag">TAP</i></div>
+ <div class="ui btn" id="a2">Check message<i class="tag">TAP</i></div>
+ <div class="ui btn" id="a3">Upload your ID card<i class="tag">SKIP</i></div>
+ <div class="ui btn" id="a4">Allow contacts access<i class="tag">SKIP</i></div>
+ <div class="ui res" id="a5" style="opacity:.25">HIGH RISK · upfront fee + urgency</div>`,
+ steps:[['#a1','tap','Tap the box. Paste only the message text. Nothing else.'],['#a3','skip','You do NOT need to upload an ID. They want it. You don’t.'],['#a4','skip','Contacts access is not needed. Skip it.'],['#a2','tap','Tap “Check message”. The only button that matters.'],['#a5','tap','Risk level and reasons appear in seconds.']],
+ tip:'Never paste passwords, OTPs or ID numbers into any checker.'},
+{pill:'FILE 02',title:'The trap <span>wants you to tap</span>',
+ screen:`<div class="ui"><small>SMS · UNKNOWN NUMBER</small>You’re selected! Confirm your seat now:</div>
+ <div class="ui link" id="b1">intern-selection-pay.xyz/confirm<i class="tag">DON’T</i></div>
+ <div class="ui btn bad" id="b2">Pay ₹1,500 now<i class="tag">DON’T</i></div>
+ <div class="ui bad" id="b3">Reply with your ID photo<i class="tag">DON’T</i></div>
+ <div class="ui btn" id="b4">Long-press → Share to NIRVANA<i class="tag">DO THIS</i></div>`,
+ steps:[['#b1','avoid','Do not tap the link. That domain is the hook.'],['#b2','avoid','Never pay a fee to “secure” a selection.'],['#b3','avoid','Do not reply with ID, photos or OTP.'],['#b4','tap','Long-press the message and share it to NIRVANA instead.']],
+ tip:'Urgency + money + unknown link = stop. Pause first.'},
+{pill:'FILE 03',title:'Read the verdict. <span>Stay calm.</span>',
+ screen:`<div class="ui res" id="c1">HIGH RISK<br><span style="font-weight:400">Why: upfront payment · urgency · unverified domain</span></div>
+ <div class="ui btn" id="c2">Verify on official website<i class="tag">TAP</i></div>
+ <div class="ui btn bad" id="c3">Pay anyway<i class="tag">DON’T</i></div>
+ <div class="ui btn" id="c4">Report &amp; block sender<i class="tag">TAP</i></div>
+ <div class="ui btn" id="c5">Read full details<i class="tag">OPTIONAL</i></div>`,
+ steps:[['#c1','tap','Read the “why” first. That is the whole lesson.'],['#c3','avoid','Do not pay “just in case”. A real offer survives a pause.'],['#c2','tap','Open the company’s official site yourself. Type it. Don’t follow theirs.'],['#c4','tap','Fake? Report and block. Two taps.'],['#c5','skip','Full details are optional if you’re in a hurry.']],
+ tip:'Always verify on a site you searched for, not the link they sent.'},
+{pill:'FILE 04',title:'Three habits <span>that lock the door</span>',
+ screen:`<div class="ui btn" id="d1">1 · Pause for 3 seconds<i class="tag">HABIT</i></div>
+ <div class="ui btn" id="d2">2 · Verify on the official site<i class="tag">HABIT</i></div>
+ <div class="ui btn" id="d3">3 · Turn on MFA<i class="tag">HABIT</i></div>
+ <div class="ui btn" id="d4">Install a random “verification” app<i class="tag">SKIP</i></div>
+ <div class="ui btn" id="d5">Forward it to everyone<i class="tag">SKIP</i></div>`,
+ steps:[['#d1','tap','Urgency is their weapon. A pause breaks it.'],['#d2','tap','Look the sender up yourself.'],['#d3','tap','Settings → Security → MFA. One-time setup, big protection.'],['#d4','skip','Never install apps because a message asked.'],['#d5','skip','Don’t forward unchecked messages. Report them.']],
+ tip:'You don’t need to be an expert. Three habits are enough.'}
+];
+const cur=`<svg viewBox="0 0 24 24"><path d="M5 3l14 8-6 2 4 7-3 1-4-7-5 4z" fill="#ff1a3c" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/></svg>`;
+const feed=document.getElementById('feed');
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches;
+R.forEach((r,n)=>{
+ const el=document.createElement('section');el.className='reel';
+ el.innerHTML=`<div class="bars">${r.steps.map(()=>'<i></i>').join('')}<i></i></div>
+ <div class="head"><span class="rec">REC · LIVE</span><span class="pill">${r.pill}</span></div>
+ <h2>${r.title}</h2>
+ <div class="stage">${r.screen}<div class="cur">${cur}</div><div class="rip"></div></div>
+ <div class="say"><b>WATCH</b><span>Loading…</span></div>
+ <div class="side"><button class="lk" aria-label="Like">♥</button><button class="rp" aria-label="Replay">↺</button></div>`;
+ feed.appendChild(el);
+ const stage=el.querySelector('.stage'),c=el.querySelector('.cur'),rip=el.querySelector('.rip'),say=el.querySelector('.say'),bars=[...el.querySelectorAll('.bars i')];
+ let i=0,t=null,paused=false,visible=false;const N=r.steps.length;
+ const clear=()=>stage.querySelectorAll('.ui').forEach(u=>u.classList.remove('tap','avoid','skip'));
+ function run(){
+  clearTimeout(t);if(!visible||paused)return;
+  if(i>=N){clear();c.style.opacity=0;say.innerHTML=`<b class="tip">REMEMBER</b><span>${r.tip}</span>`;bars.forEach(b=>b.className='on');
+   t=setTimeout(()=>{i=0;c.style.opacity=1;stage.querySelectorAll('.res').forEach(x=>x.style.opacity=.25);run()},4200);return}
+  const [sel,kind,text]=r.steps[i],tg=stage.querySelector(sel),s=stage.getBoundingClientRect(),b=tg.getBoundingClientRect();
+  clear();bars.forEach((x,k)=>x.className=k<i?'on':k===i?'now':'');
+  const x=(b.left-s.left+b.width*.6)+'px',y=(b.top-s.top+b.height*.55)+'px';
+  c.style.left=x;c.style.top=y;
+  setTimeout(()=>{if(!visible)return;tg.classList.add(kind);tg.style.opacity='';rip.style.left=x;rip.style.top=y;rip.classList.remove('go');void rip.offsetWidth;rip.classList.add('go');
+   if(kind==='avoid'&&!reduce){stage.classList.remove('tear');void stage.offsetWidth;stage.classList.add('tear')}
+   say.innerHTML=`<b class="${kind}">${kind==='tap'?'DO THIS':kind==='avoid'?'DON’T':'SKIP'}</b><span>${text}</span>`},reduce?0:650);
+  i++;t=setTimeout(run,3000);
+ }
+ el._play=v=>{visible=v;if(v){i=0;paused=false;run()}else{clearTimeout(t);clear()}};
+ stage.addEventListener('click',()=>{paused=!paused;paused?clearTimeout(t):run()});
+ el.querySelector('.rp').onclick=()=>{i=0;paused=false;run()};
+ el.querySelector('.lk').onclick=e=>e.currentTarget.classList.toggle('liked');
+});
+const io=new IntersectionObserver(es=>es.forEach(e=>e.target._play(e.isIntersecting&&e.intersectionRatio>.6)),{root:feed,threshold:[.6]});
+document.querySelectorAll('.reel').forEach(r=>io.observe(r));
+/* the watcher */
+const pup=document.getElementById('pup');
+addEventListener('pointermove',e=>{const dx=(e.clientX/innerWidth-.5)*7,dy=(e.clientY/innerHeight-.5)*4;pup.setAttribute('cx',17+dx);pup.setAttribute('cy',10+dy)});
+const ip=document.getElementById('ip');
+setInterval(()=>{ip.textContent=[1,2,3,4].map(()=>Math.floor(Math.random()*256)).join('.')},1800);
+const W=['I SEE YOU','NOT ALONE','DON’T CLICK','WE KNOW YOUR NUMBER','STILL WATCHING'],wh=document.getElementById('whisper');
+if(!reduce)setInterval(()=>{wh.textContent=W[Math.floor(Math.random()*W.length)];wh.classList.remove('on');void wh.offsetWidth;wh.classList.add('on')},14000);
+
+/* Secure community story submission: recipient address stays on the server. */
+const storyForm=document.getElementById('storyForm');
+if(storyForm){
+  const submitButton=storyForm.querySelector('button[type="submit"]');
+  const status=document.createElement('p');
+  status.id='storyStatus';
+  status.setAttribute('role','status');
+  status.setAttribute('aria-live','polite');
+  status.style.cssText='font:12px/1.5 Arial,sans-serif;color:#9dfcf0;margin:4px 0 0';
+  storyForm.appendChild(status);
+
+  storyForm.addEventListener('submit',async event=>{
+    event.preventDefault();
+    const kind=document.getElementById('storyType').value;
+    const story=document.getElementById('storyText').value.trim();
+    if(!kind||!story)return;
+
+    submitButton.disabled=true;
+    submitButton.textContent='SENDING…';
+    status.textContent='';
+
+    try{
+      const response=await fetch('/api/community/story',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({category:kind,story:story})
+      });
+      const result=await response.json().catch(()=>({}));
+      if(!response.ok)throw new Error(result.detail||'Unable to send your story right now.');
+      storyForm.reset();
+      status.textContent='Thank you. Your story has been sent to the NIRVANA team.';
+      status.style.color='#9dfcf0';
+    }catch(error){
+      status.textContent=error.message==='Failed to fetch'
+        ?'Could not connect to NIRVANA. Please run the website with its backend server.'
+        :error.message;
+      status.style.color='#ff8a9c';
+    }finally{
+      submitButton.disabled=false;
+      submitButton.textContent='SUBMIT STORY SECURELY';
+    }
+  });
+}
+
+</script>
+</body>
+</html>
